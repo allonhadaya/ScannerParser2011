@@ -1,0 +1,4 @@
+//This checks for identifiers
+a
+bananas
+bananas75

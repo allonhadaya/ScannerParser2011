@@ -1,0 +1,8 @@
+//This checks for keywords
+boolean
+else
+if
+int
+main
+void
+while

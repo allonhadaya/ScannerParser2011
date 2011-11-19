@@ -1,0 +1,15 @@
+//This checks for separators
+=
++
+-
+*
+/
+<
+<=
+>
+>=
+==
+!=
+&&
+||
+!

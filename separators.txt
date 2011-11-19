@@ -1,0 +1,7 @@
+//This checks for separators
+(
+)
+{
+}
+;
+,
