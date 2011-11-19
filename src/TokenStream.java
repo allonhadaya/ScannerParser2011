@@ -56,19 +56,19 @@ public class TokenStream {
 				while (!isEndOfLine(nextChar)) {
 					nextChar = readChar();
 				}
+				nextChar = readChar();
+				//Current token will be other because this token is a comment, so return the next
+				t = nextToken();
 			} else {
-				// A slash followed by a backslash is an AND operator (/\). 92 is \, the number is used since \ causes an error.
-				if (nextChar == 92) {
-					t.setValue("/" + nextChar);
-					nextChar = readChar();
-				} else
-					// A slash followed by anything else must be an operator.
-					t.setValue("/");
+				//It has to be the division operator otherwise
 				t.setType("Operator");
-				return t;
+				t.setValue("/");
 			}
-		}
+			return t;
 
+		}
+		
+		
 		// Then check for an operator; recover 2-character operators
 		// as well as 1-character ones.
 		if (isOperator(nextChar)) {
@@ -84,15 +84,7 @@ public class TokenStream {
 				if (nextChar == '=') {
 					t.setValue(t.getValue() + nextChar);
 				}
-				return t;
-			case '\\': // look for the OR operator, \/
 				nextChar = readChar();
-				if (nextChar == '/') {
-					t.setValue(t.getValue() + nextChar);
-				}
-				else {
-					t.setType("Other");
-				}
 				return t;
 			case '&': // look for the AND operator, &&
 				nextChar = readChar();
@@ -102,6 +94,7 @@ public class TokenStream {
 				else{
 					t.setType("Other");
 				}
+				nextChar = readChar();
 				return t;
 			case '|': // look for the OR
 				nextChar = readChar();
@@ -111,6 +104,7 @@ public class TokenStream {
 				else{
 					t.setType("Other");
 				}
+				nextChar = readChar();
 				return t;
 			default: // all other operators
 				nextChar = readChar();
@@ -123,6 +117,8 @@ public class TokenStream {
 			t.setType("Separator");
 			t.setValue(t.getValue() + nextChar);
 			nextChar = readChar();
+			//Grabs multiple separators and aggregates them into one 
+			//(not sure why, but it's how it was)
 			while (isSeparator(nextChar)) {
 				t.setValue(t.getValue() + nextChar);
 				nextChar = readChar();
@@ -141,6 +137,9 @@ public class TokenStream {
 			// now see if this is a keyword
 			if (isKeyword(t.getValue()))
 				t.setType("Keyword");
+			// check if it's true or false
+			if (isBooleanLiteral(t.getValue()))
+				t.setType("Boolean-Literal");
 			if (isEndOfToken(nextChar)) // If token is valid, returns.
 				return t;
 		}
@@ -206,6 +205,10 @@ public class TokenStream {
 
 	private boolean isKeyword(String s) {
 		return s.matches("boolean|else|if|int|main|void|while");
+	}
+	
+	private boolean isBooleanLiteral(String s) {
+		return s.matches("true|false");
 	}
 
 	private boolean isWhiteSpace(char c) {
