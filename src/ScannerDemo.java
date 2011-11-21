@@ -1,6 +1,7 @@
+import java.io.FileNotFoundException;
+
 /**
- * @author Christelle
- * 
+ * @author Allon Hadaya, Keith McPherson 
  */
 public class ScannerDemo {
 
@@ -9,13 +10,14 @@ public class ScannerDemo {
 
 	public static void main(String args[]) {
 
-		TokenStream ts = new TokenStream(file1);
-
-		System.out.println(file1);
-
-		while (!ts.isEndofFile()) {
-			Token t = ts.nextToken();
-			System.out.println(t);
+		try {
+			System.out.println(file1);
+			TokenStream ts = new TokenStream(file1);
+			while (!ts.isEoF()) {
+				System.out.println(ts.nextToken());
 			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }
