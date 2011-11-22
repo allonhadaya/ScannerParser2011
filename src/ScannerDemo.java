@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
  */
 public class ScannerDemo {
 
-	private static String file1 = "testjay.txt";
+	private static String file1 = "Test.jay";
 	private static int counter = 1;
 
 	public static void main(String args[]) {

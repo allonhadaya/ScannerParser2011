@@ -35,7 +35,7 @@ public class TokenStream {
 
 		// comment or /
 		if (nextChar == '/') {
-			t.value += nextChar;
+			t.setValue(t.getValue() + nextChar);
 			readChar();
 			if (nextChar == '/') {
 				while (!isEndOfLine(nextChar)) {
@@ -44,18 +44,18 @@ public class TokenStream {
 				readChar();
 				t = nextToken();
 			} else {
-				t.type = TokenType.Operator;
+				t.setType(TokenType.Operator);
 			}
 			return t;
 		}
 
 		// &&
 		if (nextChar == '&') {
-			t.value += nextChar;
+			t.setValue(t.getValue() + nextChar);
 			readChar();
 			if (nextChar == '&') {
-				t.type = TokenType.Operator;
-				t.value += nextChar;
+				t.setType(TokenType.Operator);
+				t.setValue(t.getValue() + nextChar);
 				readChar();
 			} else {
 				collectErrorToken(t);
@@ -65,11 +65,11 @@ public class TokenStream {
 
 		// ||
 		if (nextChar == '|') {
-			t.value += nextChar;
+			t.setValue(t.getValue() + nextChar);
 			readChar();
 			if (nextChar == '|') {
-				t.type = TokenType.Operator;
-				t.value += nextChar;
+				t.setType(TokenType.Operator);
+				t.setValue(t.getValue() + nextChar);
 				readChar();
 			} else {
 				collectErrorToken(t);
@@ -79,8 +79,8 @@ public class TokenStream {
 
 		// <, >, !, =, <=, >=, !=, ==, +, -, *, or !
 		if (isOperator(nextChar)) {
-			t.type = TokenType.Operator;
-			t.value += nextChar;
+			t.setType(TokenType.Operator);
+			t.setValue(t.getValue() + nextChar);
 			switch (nextChar) {
 			case '<':
 			case '>':
@@ -88,7 +88,7 @@ public class TokenStream {
 			case '=':
 				readChar();
 				if (nextChar == '=') { // matches <=, >=, !=, ==
-					t.value += nextChar;
+					t.setValue(t.getValue() + nextChar);
 					readChar();
 				}
 				break;
@@ -101,26 +101,26 @@ public class TokenStream {
 
 		// separator
 		if (isSeparator(nextChar)) {
-			t.type = TokenType.Separator;
-			t.value += nextChar;
+			t.setType(TokenType.Separator);
+			t.setValue(t.getValue() + nextChar);
 			readChar();
 			return t;
 		}
 
 		// identifier, keyword, or literal.
 		if (isLetter(nextChar)) {
-			t.type = TokenType.Identifier;
+			t.setType(TokenType.Identifier);
 
 			while ((isLetter(nextChar) || isDigit(nextChar))) {
-				t.value += nextChar;
+				t.setValue(t.getValue() + nextChar);
 				readChar();
 			}
 
-			if (isKeyword(t.value)) {
-				t.type = TokenType.Keyword;
+			if (isKeyword(t.getValue())) {
+				t.setType(TokenType.Keyword);
 			}
-			if (isBooleanLiteral(t.value)) {
-				t.type = TokenType.BooleanLiteral;
+			if (isBooleanLiteral(t.getValue())) {
+				t.setType(TokenType.BooleanLiteral);
 			}
 			if (!isEndOfToken()) {
 				collectErrorToken(t);
@@ -130,10 +130,10 @@ public class TokenStream {
 
 		// IntegerLiteral
 		if (isDigit(nextChar)) {
-			t.type = TokenType.IntegerLiteral;
+			t.setType(TokenType.IntegerLiteral);
 
 			while (isDigit(nextChar)) {
-				t.value += nextChar;
+				t.setValue(t.getValue() + nextChar);
 				readChar();
 			}
 
@@ -217,7 +217,7 @@ public class TokenStream {
 
 	private void collectErrorToken(Token t) {
 		while (!isEndOfToken()) {
-			t.value += nextChar;
+			t.setValue(t.getValue() + nextChar);
 			readChar();
 		}
 	}

@@ -5,5 +5,5 @@ public enum TokenType {
 	IntegerLiteral,
 	Separator,
 	Operator,
-	Error
+	Other
 }
