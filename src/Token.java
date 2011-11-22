@@ -5,14 +5,10 @@
  */
 public class Token {
 
-	private TokenType type = TokenType.Other; // default: Other
-	private String value = ""; // default: ""
+	private String type = "Other";
+	private String value = "";
 
 	public void setType(String type) {
-		this.type = TokenType.valueOf(type);
-	}
-	
-	public void setType(TokenType type) {
 		this.type = type;
 	}
 

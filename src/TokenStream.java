@@ -11,17 +11,21 @@ import java.io.IOException;
 public class TokenStream {
 
 	private BufferedReader input;
-	private boolean isEoF = false;
+	private boolean isEof = false;
 	private char nextChar = ' ';
 
 	/**
 	 * Construct a new TokenStream that reads from fileName
 	 * 
 	 * @param fileName The file to be scanned
-	 * @throws FileNotFoundException The file to be scanned could not be found
 	 */
-	public TokenStream(String fileName) throws FileNotFoundException {
-		input = new BufferedReader(new FileReader(fileName));
+	public TokenStream(String fileName) {
+		try {
+			input = new BufferedReader(new FileReader(fileName));
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found: " + fileName);
+			isEof = true;
+		}
 	}
 
 	/**
@@ -44,7 +48,7 @@ public class TokenStream {
 				readChar();
 				t = nextToken();
 			} else {
-				t.setType(TokenType.Operator);
+				t.setType("Operator");
 			}
 			return t;
 		}
@@ -54,11 +58,11 @@ public class TokenStream {
 			t.setValue(t.getValue() + nextChar);
 			readChar();
 			if (nextChar == '&') {
-				t.setType(TokenType.Operator);
+				t.setType("Operator");
 				t.setValue(t.getValue() + nextChar);
 				readChar();
 			} else {
-				collectErrorToken(t);
+				collectOtherToken(t);
 			}
 			return t;
 		}
@@ -68,18 +72,18 @@ public class TokenStream {
 			t.setValue(t.getValue() + nextChar);
 			readChar();
 			if (nextChar == '|') {
-				t.setType(TokenType.Operator);
+				t.setType("Operator");
 				t.setValue(t.getValue() + nextChar);
 				readChar();
 			} else {
-				collectErrorToken(t);
+				collectOtherToken(t);
 			}
 			return t;
 		}
 
 		// <, >, !, =, <=, >=, !=, ==, +, -, *, or !
 		if (isOperator(nextChar)) {
-			t.setType(TokenType.Operator);
+			t.setType("Operator");
 			t.setValue(t.getValue() + nextChar);
 			switch (nextChar) {
 			case '<':
@@ -101,7 +105,7 @@ public class TokenStream {
 
 		// separator
 		if (isSeparator(nextChar)) {
-			t.setType(TokenType.Separator);
+			t.setType("Separator");
 			t.setValue(t.getValue() + nextChar);
 			readChar();
 			return t;
@@ -109,7 +113,7 @@ public class TokenStream {
 
 		// identifier, keyword, or literal.
 		if (isLetter(nextChar)) {
-			t.setType(TokenType.Identifier);
+			t.setType("Identifier");
 
 			while ((isLetter(nextChar) || isDigit(nextChar))) {
 				t.setValue(t.getValue() + nextChar);
@@ -117,20 +121,20 @@ public class TokenStream {
 			}
 
 			if (isKeyword(t.getValue())) {
-				t.setType(TokenType.Keyword);
+				t.setType("Keyword");
 			}
 			if (isBooleanLiteral(t.getValue())) {
-				t.setType(TokenType.BooleanLiteral);
+				t.setType("Boolean-Literal");
 			}
 			if (!isEndOfToken()) {
-				collectErrorToken(t);
+				collectOtherToken(t);
 			}
 			return t;
 		}
 
 		// IntegerLiteral
 		if (isDigit(nextChar)) {
-			t.setType(TokenType.IntegerLiteral);
+			t.setType("Integer-Literal");
 
 			while (isDigit(nextChar)) {
 				t.setValue(t.getValue() + nextChar);
@@ -138,14 +142,14 @@ public class TokenStream {
 			}
 
 			if (!isEndOfToken()) {
-				collectErrorToken(t);
+				collectOtherToken(t);
 			}
 
 			return t;
 		}
-		
-		// Error
-		collectErrorToken(t);
+
+		// Other
+		collectOtherToken(t);
 
 		return t;
 	}
@@ -155,14 +159,14 @@ public class TokenStream {
 	 */
 	private void readChar() {
 		int next = 0;
-		if (!isEoF) {
+		if (!isEof) {
 			try {
 				next = input.read();
 			} catch (IOException e) {
 				System.exit(-1);
 			}
 			if (next == -1) {
-				isEoF = true;
+				isEof = true;
 				next = 0;
 			}
 		}
@@ -194,7 +198,7 @@ public class TokenStream {
 	}
 
 	private boolean isEndOfToken() {
-		return (isWhiteSpace(nextChar) || isOperator(nextChar) || isSeparator(nextChar) || isEoF);
+		return (isWhiteSpace(nextChar) || isOperator(nextChar) || isSeparator(nextChar) || isEof);
 	}
 
 	private boolean isWhiteSpace(char c) {
@@ -206,16 +210,24 @@ public class TokenStream {
 	}
 
 	public boolean isEoF() {
-		return isEoF;
+		return isEof;
+	}
+
+	public boolean isEndofFile() {
+		return isEof;
+	}
+
+	public boolean isEoFile() {
+		return isEof;
 	}
 
 	private void skipWhiteSpace() {
-		while (!isEoF && isWhiteSpace(nextChar)) {
+		while (!isEof && isWhiteSpace(nextChar)) {
 			readChar();
 		}
 	}
 
-	private void collectErrorToken(Token t) {
+	private void collectOtherToken(Token t) {
 		while (!isEndOfToken()) {
 			t.setValue(t.getValue() + nextChar);
 			readChar();
