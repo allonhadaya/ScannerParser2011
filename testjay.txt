@@ -1,5 +1,7 @@
 void main() {
-someIdentifier;
-35 + 7;
-_$;
+	int x;int y; int z;
+	if (x==55 && x==3)
+		y=33453;
+	else
+		z=55;
 }

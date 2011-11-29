@@ -21,7 +21,7 @@ public class TokenStream {
 
 	private BufferedReader input;
 
-	// This function was added to make the main.
+	// This function was added to make main.
 	public boolean isEoFile() {
 		return isEof;
 	}
@@ -83,8 +83,8 @@ public class TokenStream {
 				nextChar = readChar();
 				if (nextChar == '=') {
 					t.setValue(t.getValue() + nextChar);
+					nextChar = readChar();
 				}
-				nextChar = readChar();
 				return t;
 			case '&': // look for the AND operator, &&
 				nextChar = readChar();
@@ -119,10 +119,10 @@ public class TokenStream {
 			nextChar = readChar();
 			//Grabs multiple separators and aggregates them into one 
 			//(not sure why, but it's how it was)
-			while (isSeparator(nextChar)) {
+			/*while (isSeparator(nextChar)) {
 				t.setValue(t.getValue() + nextChar);
 				nextChar = readChar();
-			}
+			}*/
 			return t;
 		}
 
@@ -139,13 +139,13 @@ public class TokenStream {
 				t.setType("Keyword");
 			// check if it's true or false
 			if (isBooleanLiteral(t.getValue()))
-				t.setType("Boolean-Literal");
+				t.setType("Literal");
 			if (isEndOfToken(nextChar)) // If token is valid, returns.
 				return t;
 		}
 
 		if (isDigit(nextChar)) { // check for integers
-			t.setType("Integer-Literal");
+			t.setType("Literal");
 			while (isDigit(nextChar)) {
 				t.setValue(t.getValue() + nextChar);
 				nextChar = readChar();

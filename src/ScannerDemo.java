@@ -1,3 +1,4 @@
+
 /**
  * @author Christelle
  * 
@@ -10,12 +11,15 @@ public class ScannerDemo {
 	public static void main(String args[]) {
 
 		TokenStream ts = new TokenStream(file1);
-
+		
 		System.out.println(file1);
 
-		while (!ts.isEndofFile()) {
+		/*while (!ts.isEndofFile()) {
 			Token t = ts.nextToken();
 			System.out.println(t);
-			}
+			}*/
+		ConcreteSyntax syn = new ConcreteSyntax(ts);
+		System.out.println(syn.program().display());
+		//System.out.println(syn.toString());
 	}
 }
