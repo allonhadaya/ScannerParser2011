@@ -5,4 +5,6 @@ void main() {
 		y=33453;
 	else
 		z=55;
+	if (y!=6)
+		bananas=35;
 }

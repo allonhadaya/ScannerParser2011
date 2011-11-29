@@ -60,7 +60,7 @@ public class ConcreteSyntax {
 		// Declarations --> { Declaration }*
 		Declarations ds = new Declarations();
 		while (token.getValue().equals("int")
-				|| token.getValue().equals("bool")) {
+				|| token.getValue().equals("boolean")) {
 			declaration(ds);
 		}
 		return ds;
@@ -78,7 +78,7 @@ public class ConcreteSyntax {
 		Type t = null;
 		if (token.getValue().equals("int"))
 			t = new Type(token.getValue());
-		else if (token.getValue().equals("bool"))
+		else if (token.getValue().equals("boolean"))
 			t = new Type(token.getValue());
 		else
 			throw new RuntimeException(SyntaxError("int | boolean"));
