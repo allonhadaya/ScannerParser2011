@@ -152,6 +152,7 @@ public class ConcreteSyntax {
 			match("=");
 			a.source = expression();
 			match(";");
+			
 		//TO BE COMPLETED
 		} else
 			throw new RuntimeException(SyntaxError("Identifier"));
@@ -192,7 +193,7 @@ public class ConcreteSyntax {
 	}
 
 	private Expression relation() {
-		// Relation --> Addition [ < | <= | > | >= | == | <> ] Addition }*
+		// Relation --> Addition [ < | <= | > | >= | == | != ] Addition }*
 		Binary b;
 		Expression e;
 		e = addition();
@@ -200,7 +201,7 @@ public class ConcreteSyntax {
 				|| token.getValue().equals(">")
 				|| token.getValue().equals(">=")
 				|| token.getValue().equals("==")
-				|| token.getValue().equals("<>")) {
+				|| token.getValue().equals("!=")) {
 			b = new Binary();
 			b.term1 = e;
 			b.op = new Operator(token.getValue());

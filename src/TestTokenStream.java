@@ -21,17 +21,9 @@ public class TestTokenStream {
 
 	@Test
 	public void testBooleanLiteral() {
-		TokenStream ts = new TokenStream("BooleanLiteral.jay");
+		TokenStream ts = new TokenStream("Literal.jay");
 		while (!ts.isEoF()) {
-			Assert.assertEquals("Boolean-Literal", ts.nextToken().getType());
-		}
-	}
-
-	@Test
-	public void testIntegerLiteral() {
-		TokenStream ts = new TokenStream("IntegerLiteral.jay");
-		while (!ts.isEoF()) {
-			Assert.assertEquals("Integer-Literal", ts.nextToken().getType());
+			Assert.assertEquals("Literal", ts.nextToken().getType());
 		}
 	}
 

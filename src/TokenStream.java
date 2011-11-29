@@ -124,7 +124,7 @@ public class TokenStream {
 				t.setType("Keyword");
 			}
 			if (isBooleanLiteral(t.getValue())) {
-				t.setType("Boolean-Literal");
+				t.setType("Literal");
 			}
 			if (!isEndOfToken()) {
 				collectOtherToken(t);
@@ -134,7 +134,7 @@ public class TokenStream {
 
 		// IntegerLiteral
 		if (isDigit(nextChar)) {
-			t.setType("Integer-Literal");
+			t.setType("Literal");
 
 			while (isDigit(nextChar)) {
 				t.setValue(t.getValue() + nextChar);
